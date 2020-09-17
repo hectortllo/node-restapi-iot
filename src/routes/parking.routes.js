@@ -20,6 +20,7 @@ router.post('/', async (req, res) => {
   };
   const result = await db.collection('parking').insertOne(positionParking);
   res.json(result.ops[0]);
+
 });
 
 router.get('/:id', async(req, res) => {
