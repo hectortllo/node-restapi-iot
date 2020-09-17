@@ -13,14 +13,14 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const db = await connect();
-  const positions = req.body;
-  console.log(positions);
-  await db.collection('parking').insertMany(positions, (err, res) => {
-    if (err)
-      throw err;
-    console.log("Number of documents inserted: " + res.insertedCount);
-  });
-  res.json(req.body);
+  const positionParking = {
+    position: req.body[0].position,
+    taken: false,
+    date: Date("$history.ModDate")
+  };
+  const result = await db.collection('parking').insertOne(positionParking);
+  res.json(result.ops[0]);
+
 });
 
 router.get('/:id', async(req, res) => {
