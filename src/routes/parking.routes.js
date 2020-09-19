@@ -15,8 +15,12 @@ router.post('/', async (req, res) => {
   const db = await connect();
   const positionParking = {
     position: req.body[0].position,
-    taken: false,
-    date: Date("$history.ModDate")
+    record: [
+      {
+        taken: false,
+        date: Date("$history.ModDate")
+      }
+    ]
   };
   const result = await db.collection('parking').insertOne(positionParking);
   res.json(result.ops[0]);
@@ -42,12 +46,17 @@ router.delete('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const updateParking = {
-    "position": req.body.position,
-    "taken": req.body.taken
-  };
   const db = await connect();
-  await db.collection('parking').updateOne({ _id: ObjectID(id)}, { $set: updateParking });
+  await db.collection('parking').updateOne({ _id: ObjectID(id)}, 
+    { 
+      $push: {
+        "record": {
+          "taken": req.body.record[0].taken,
+          "date": Date("$history.ModDate")
+        }
+      }
+    }
+  );
   res.json({
     message: `Parking spot ${req.body.position} updated`
   })
