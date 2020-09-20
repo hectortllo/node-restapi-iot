@@ -8,7 +8,16 @@ import { ObjectID } from 'mongodb';
 router.get('/', async (req, res) => {
   const db = await connect();
   const result = await db.collection('parking').find({}).toArray();
-  res.json(result);
+  let data = [];
+  result.forEach(element => {
+    let dataString = {
+      id: element._id,
+      position: element.position,
+      record: element.record.slice(-10)
+    };
+    data[data.length] = dataString;
+  })
+  res.json(data);
 });
 
 router.post('/', async (req, res) => {
