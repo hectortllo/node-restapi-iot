@@ -40,7 +40,12 @@ router.get('/:id', async(req, res) => {
   const { id } = req.params;
   const db = await connect();
   const result = await db.collection('parking').findOne({ _id: ObjectID(id) });
-  res.json(result);
+  const resultLastPosition = {
+    id: result._id,
+    position: result.position,
+    record: result.record.slice(-1)
+  }
+  res.json(resultLastPosition);
 });
 
 router.delete('/:id', async (req, res) => {
