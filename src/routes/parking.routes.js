@@ -22,11 +22,18 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const db = await connect();
+  /* 
+    IMPORTANTE:
+    en el valor taken habrán 3 posibles valores:
+      1. Ocupado
+      2. Desocupado
+      3. Apartado
+  */
   const positionParking = {
     position: req.body[0].position,
     record: [
       {
-        taken: false,
+        taken: 2,
         date: Date("$history.ModDate")
       }
     ]
