@@ -20,6 +20,16 @@ router.get('/', async (req, res) => {
   res.json(data);
 });
 
+router.get('/ids', async(req, res) => {
+  const db = await connect();
+  let ids = [];
+  await db.collection('parking').find().forEach(function(element) {
+    ids.push(element._id);
+  })
+  console.log(ids);
+  res.json(ids);
+});
+
 router.post('/', async (req, res) => {
   const db = await connect();
   /* 
