@@ -22,11 +22,18 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const db = await connect();
+  /* 
+    IMPORTANTE:
+    en el valor taken habrán 3 posibles valores:
+      1. Ocupado
+      2. Desocupado
+      3. Apartado
+  */
   const positionParking = {
     position: req.body[0].position,
     record: [
       {
-        taken: false,
+        taken: 2,
         date: Date("$history.ModDate")
       }
     ]
@@ -40,7 +47,12 @@ router.get('/:id', async(req, res) => {
   const { id } = req.params;
   const db = await connect();
   const result = await db.collection('parking').findOne({ _id: ObjectID(id) });
-  res.json(result);
+  const resultLastPosition = {
+    id: result._id,
+    position: result.position,
+    record: result.record.slice(-1)
+  }
+  res.json(resultLastPosition);
 });
 
 router.delete('/:id', async (req, res) => {
