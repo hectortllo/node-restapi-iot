@@ -17,6 +17,7 @@ router.get('/', async (req, res) => {
     };
     data[data.length] = dataString;
   })
+  console.log('Get general hecho');
   res.json(data);
 });
 
@@ -26,7 +27,6 @@ router.get('/ids', async(req, res) => {
   await db.collection('parking').find().forEach(function(element) {
     ids.push(element._id);
   })
-  console.log(ids);
   res.json(ids);
 });
 
@@ -62,6 +62,7 @@ router.get('/:id', async(req, res) => {
     position: result.position,
     record: result.record.slice(-1)
   }
+  console.log('Get por id hecho');
   res.json(resultLastPosition);
 });
 
@@ -88,6 +89,7 @@ router.put('/:id', async (req, res) => {
       }
     }
   );
+  console.log('Posición actualizada');
   res.json({
     message: `Parking spot ${req.body.position} updated`
   })
